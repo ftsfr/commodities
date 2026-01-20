@@ -1,0 +1,83 @@
+[config]
+type = "pipeline"
+chartbook_format_version = "0.0.2"
+
+[site]
+title = "Commodities"
+author = "Jeremy Bejarano"
+copyright = "2025"
+logo_path = ""
+favicon_path = ""
+
+[pipeline]
+id = "commodities"
+pipeline_name = "Commodities"
+pipeline_description = "Commodity futures returns and basis data from Bloomberg and WRDS"
+lead_pipeline_developer = "Jeremy Bejarano"
+contributors = ["Jeremy Bejarano"]
+runs_on = "Windows/Linux/MacOS (Bloomberg + WRDS required)"
+git_repo_URL = "https://github.com/ftsfr/commodities"
+README_file_path = "./README.md"
+
+[notebooks]
+
+[notebooks.summary_commodities]
+notebook_name = "summary_commodities"
+notebook_description = "Summary statistics and visualization of commodity returns"
+notebook_path = "_output/_notebook_build/summary_commodities_ipynb.ipynb"
+is_publishable = true
+
+[charts]
+
+[dataframes]
+
+[dataframes.ftsfr_commodities_returns]
+dataframe_name = "ftsfr_commodities_returns"
+short_description_df = "Monthly commodity returns matched to HKM factors"
+data_sources = ["Bloomberg", "WRDS", "He-Kelly-Manela"]
+data_providers = ["Bloomberg", "WRDS", "AQR"]
+need_to_contact_provider = ["no"]
+data_on_pre_approved_list = ["No"]
+links_to_data_providers = ["https://bloomberg.com", "https://wrds-www.wharton.upenn.edu"]
+topic_tags = ["commodities", "futures", "returns", "GSCI", "energy", "metals", "agriculture"]
+type_of_data_access = ["Bloomberg Terminal", "WRDS", "Public"]
+data_license = "Bloomberg / WRDS / Public"
+license_expiration_date = ""
+provider_contact_info = ""
+restriction_on_use = "No"
+how_is_pulled = "GSCI indices from Bloomberg, matched to HKM commodity factors"
+path_to_parquet_data = "./_data/ftsfr_commodities_returns.parquet"
+path_to_excel_data = ""
+date_col = "ds"
+dataframe_docs_str = """
+## Commodity Returns
+
+Monthly returns for commodities constructed from GSCI indices and futures data.
+
+### Columns
+
+| Column | Description |
+|--------|-------------|
+| unique_id | Commodity identifier (GSCI ticker with _Return suffix) |
+| ds | Date (YYYYMM format) |
+| y | Monthly return |
+
+### Methodology
+
+- GSCI excess return indices from Bloomberg
+- Returns matched to He-Kelly-Manela commodity factors
+- Uses Hungarian algorithm for optimal correlation-based matching
+
+### Commodities Covered
+
+- Energy: Crude Oil, Natural Gas, Heating Oil, Gasoline
+- Metals: Gold, Silver, Copper, Aluminum, Nickel, Lead, Zinc
+- Agriculture: Corn, Wheat, Soybeans, Sugar, Coffee, Cocoa, Cotton
+- Livestock: Lean Hogs, Live Cattle, Feeder Cattle
+
+### Data Sources
+
+- Bloomberg: GSCI indices, commodity futures prices
+- WRDS: Futures contract data
+- He-Kelly-Manela: Commodity factor reference
+"""
