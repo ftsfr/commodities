@@ -57,3 +57,20 @@ This pipeline requires data from the `he_kelly_manela` repository for factor mat
 3. Run he_kelly_manela pipeline first to generate reference data
 4. Install dependencies: `pip install -r requirements.txt`
 5. Run pipeline: `doit`
+
+## Academic References
+
+### Primary Papers
+
+- **Yang (2013)** - "What Does the Yield Curve Tell Us About GDP Growth?"
+  - Identifies slope factor in commodity futures cross-section
+  - 10% annual return spread between high and low basis portfolios
+
+- **He, Kelly, and Manela (2017)** - "Intermediary Asset Pricing"
+  - Commodities as test assets for intermediary capital factor
+
+### Key Findings
+
+- High-basis commodity futures have higher expected returns
+- The basis spread mirrors FX forward rate spreads
+- Intermediary capital shocks explain commodity return variation

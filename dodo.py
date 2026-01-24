@@ -18,23 +18,33 @@ sys.path.insert(1, "./src/")
 
 # Bloomberg Terminal check - runs at module load time
 def _check_bloomberg_terminal():
-    """Check Bloomberg Terminal availability with env var override."""
-    # Skip prompt if environment variable is set
+    """Check Bloomberg Terminal availability.
+
+    Supports:
+    - SKIP_BLOOMBERG=1 env var to skip pull without prompt (for batch/CI use)
+    - BLOOMBERG_TERMINAL_OPEN=1 env var to enable pull without prompt
+    - Interactive prompt: Enter=skip, y=pull, n/quit=exit
+    """
+    # Check environment variables first (for non-interactive use)
+    if os.environ.get("SKIP_BLOOMBERG", "").lower() in ("true", "1", "yes"):
+        print("SKIP_BLOOMBERG detected, skipping Bloomberg pull...")
+        return False  # Skip pull, no prompt
     if os.environ.get("BLOOMBERG_TERMINAL_OPEN", "").lower() in ("true", "1", "yes"):
-        print("BLOOMBERG_TERMINAL_OPEN=True detected, skipping prompt...")
-        return True
+        print("BLOOMBERG_TERMINAL_OPEN=True detected, enabling Bloomberg pull...")
+        return True  # Pull enabled, no prompt
 
     # Interactive prompt
-    response = input("Do you have the Bloomberg terminal open in the background? [Y/n]: ")
-    if response.lower() in ('n', 'no'):
-        raise SystemExit(
-            "\nBloomberg Terminal not available. Exiting.\n"
-            "Tip: Set BLOOMBERG_TERMINAL_OPEN=True to skip this prompt."
-        )
-    return True
+    response = input("Bloomberg terminal open? [y/N/quit]: ").lower().strip()
+    if response in ('n', 'no', 'q', 'quit'):
+        raise SystemExit("Exiting.")
+    if response in ('y', 'yes'):
+        return True  # Pull enabled
+    # Default (Enter): skip pull but continue
+    print("Skipping Bloomberg pull, using existing data...")
+    return False
 
 
-_check_bloomberg_terminal()
+BLOOMBERG_AVAILABLE = _check_bloomberg_terminal()
 
 BASE_DIR = chartbook.env.get_project_root()
 DATA_DIR = BASE_DIR / "_data"
@@ -80,6 +90,13 @@ def task_pull_wrds_futures():
 
 def task_pull_bbg_active_commodities():
     """Pull active commodities from Bloomberg."""
+    if not BLOOMBERG_AVAILABLE:
+        # Skip pull task when Bloomberg is not available
+        return {
+            "actions": [],
+            "verbosity": 2,
+            "task_dep": ["config"],
+        }
     return {
         "actions": ["python src/pull_bbg_active_commodities.py"],
         "verbosity": 2,
@@ -89,6 +106,13 @@ def task_pull_bbg_active_commodities():
 
 def task_pull_bbg_commodities_basis():
     """Pull commodities basis data from Bloomberg."""
+    if not BLOOMBERG_AVAILABLE:
+        # Skip pull task when Bloomberg is not available
+        return {
+            "actions": [],
+            "verbosity": 2,
+            "task_dep": ["config"],
+        }
     return {
         "actions": ["python src/pull_bbg_commodities_basis.py"],
         "verbosity": 2,
@@ -132,14 +156,14 @@ def task_run_notebooks():
     actions = []
     for nb_py in notebooks:
         nb_name = Path(nb_py).stem
-        nb_ipynb = OUTPUT_DIR / "_notebook_build" / f"{nb_name}.ipynb"
+        nb_ipynb = OUTPUT_DIR / f"{nb_name}.ipynb"
 
         # Convert py to ipynb
         actions.append(f'ipynb-py-convert "{nb_py}" "{nb_ipynb}"')
         # Execute notebook
         actions.append(jupyter_execute_notebook(nb_ipynb))
         # Convert to HTML
-        actions.append(jupyter_to_html(nb_ipynb, OUTPUT_DIR / "_notebook_build"))
+        actions.append(jupyter_to_html(nb_ipynb, OUTPUT_DIR))
 
     return {
         "actions": actions,

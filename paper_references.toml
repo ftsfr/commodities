@@ -1,0 +1,18 @@
+# Paper References for Commodities Module
+
+[Yang2013]
+title = "What Does the Yield Curve Tell Us About GDP Growth?"
+authors = "Fan Yang"
+year = 2013
+description = "The paper identifies a 'slope' factor in the cross-section of commodity futures returns, where high-basis commodity futures exhibit higher loadings on this factor."
+empirical_facts = [
+    "High-basis commodity futures tend to have higher expected returns than low-basis futures.",
+    "There is a 10% annual return spread between high-basis and low-basis commodity futures portfolios.",
+    "The basis spread in commodity futures is similar to the return spread in high and low forward rate currencies in the foreign exchange market.",
+]
+lessons_learned = [
+    "The slope factor is a crucial component in explaining the cross-sectional returns of commodity futures.",
+    "Investment shocks, representing technological progress, are significantly correlated with the slope factor in commodity futures.",
+    "Understanding the source of the basis spread is essential due to its large economic magnitude.",
+]
+data_sources = ["GSCI methodology", "Commodity futures data"]
