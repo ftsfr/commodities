@@ -29,6 +29,35 @@ is_publishable = true
 
 [charts]
 
+[charts.commodities_cumulative_returns]
+chart_name = "Commodities Cumulative Returns"
+short_description_chart = "Cumulative returns showing growth of $1 invested in commodities"
+dataframe_id = "ftsfr_commodities_returns"
+path_to_html_chart = "./_output/commodities_cumulative_returns.html"
+path_to_excel_chart = ""
+topic_tags = ["commodities", "futures", "cumulative returns", "energy", "metals", "agriculture"]
+past_publications = []
+chart_docs_str = """
+## Commodities Cumulative Returns
+
+Cumulative returns showing growth of $1 invested in commodities constructed from GSCI indices and futures data.
+
+### Commodities Covered
+
+- Energy: Crude Oil, Natural Gas, Heating Oil, Gasoline
+- Metals: Gold, Silver, Copper, Aluminum, Nickel, Lead, Zinc
+- Agriculture: Corn, Wheat, Soybeans, Sugar, Coffee, Cocoa, Cotton
+- Livestock: Lean Hogs, Live Cattle, Feeder Cattle
+
+### Calculation
+
+Cumulative return = Product of (1 + monthly return) over time
+
+### Data Sources
+
+Bloomberg GSCI indices, WRDS futures data
+"""
+
 [dataframes]
 
 [dataframes.ftsfr_commodities_returns]

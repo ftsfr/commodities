@@ -172,10 +172,30 @@ def task_run_notebooks():
     }
 
 
+def task_generate_charts():
+    """Generate interactive HTML charts."""
+    return {
+        "actions": ["python src/generate_chart.py"],
+        "file_dep": [
+            "src/generate_chart.py",
+            DATA_DIR / "ftsfr_commodities_returns.parquet",
+        ],
+        "targets": [
+            OUTPUT_DIR / "commodities_cumulative_returns.html",
+        ],
+        "verbosity": 2,
+        "task_dep": ["calc"],
+    }
+
+
 def task_generate_pipeline_site():
     """Generate pipeline documentation site."""
     return {
         "actions": ["chartbook build -f"],
+        "file_dep": [
+            "chartbook.toml",
+            OUTPUT_DIR / "commodities_cumulative_returns.html",
+        ],
         "verbosity": 2,
-        "task_dep": ["run_notebooks"],
+        "task_dep": ["run_notebooks", "generate_charts"],
     }
