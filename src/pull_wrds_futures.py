@@ -57,10 +57,14 @@ def fetch_wrds_fut_contract(futcodes_contrdates):
         Columns include: futcode, date_, settlement, and a 'contrdate' column mapped from futcodes_contrdates.
     """
     db = wrds.Connection(wrds_username=WRDS_USERNAME)
+    # Cast futcodes to plain Python ints so the SQL IN (...) clause emits
+    # integer literals (e.g. 12345) rather than numpy reprs like
+    # np.float64(12345.0), which postgres interprets as schema "np".
+    futcode_list = ", ".join(str(int(code)) for code in futcodes_contrdates.keys())
     query = f"""
     SELECT futcode, date_, settlement
     FROM tr_ds_fut.wrds_fut_contract
-    WHERE futcode IN {tuple(futcodes_contrdates.keys())}
+    WHERE futcode IN ({futcode_list})
     """
     df = db.raw_sql(query)
     df["date_"] = pd.to_datetime(df["date_"])

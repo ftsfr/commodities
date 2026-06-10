@@ -90,6 +90,8 @@ def task_pull_wrds_futures():
     """Pull futures data from WRDS."""
     return {
         "actions": ["python src/pull_wrds_futures.py"],
+        "file_dep": ["src/pull_wrds_futures.py"],
+        "targets": [DATA_DIR / "wrds_futures.parquet"],
         "verbosity": 2,
         "task_dep": ["config"],
     }
