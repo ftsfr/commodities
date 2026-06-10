@@ -133,6 +133,8 @@ def task_pull_hkm():
     """Pull He-Kelly-Manela factor data."""
     return {
         "actions": ["python src/pull_he_kelly_manela.py"],
+        "file_dep": ["src/pull_he_kelly_manela.py"],
+        "targets": [DATA_DIR / "He_Kelly_Manela_Factors_And_Test_Assets_monthly.csv"],
         "verbosity": 2,
         "task_dep": ["config"],
     }
@@ -142,6 +144,12 @@ def task_format_hkm():
     """Create wide-format HKM parquet file."""
     return {
         "actions": ["python src/create_hkm_datasets.py"],
+        "file_dep": [
+            "src/create_hkm_datasets.py",
+            "src/pull_he_kelly_manela.py",
+            DATA_DIR / "He_Kelly_Manela_Factors_And_Test_Assets_monthly.csv",
+        ],
+        "targets": [DATA_DIR / "ftsfr_he_kelly_manela_all.parquet"],
         "verbosity": 2,
         "task_dep": ["pull_hkm"],
     }
@@ -151,6 +159,12 @@ def task_calc():
     """Calculate commodity returns and create FTSFR datasets."""
     return {
         "actions": ["python src/create_ftsfr_datasets.py"],
+        "file_dep": [
+            "src/create_ftsfr_datasets.py",
+            "src/calc_commodities_returns.py",
+            DATA_DIR / "ftsfr_he_kelly_manela_all.parquet",
+        ],
+        "targets": [DATA_DIR / "ftsfr_commodities_returns.parquet"],
         "verbosity": 2,
         "task_dep": ["pull_bbg_commodities_basis", "format_hkm"],
     }
