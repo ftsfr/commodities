@@ -1,84 +1,64 @@
-[config]
-type = "pipeline"
-chartbook_format_version = "0.0.2"
-
-[site]
-title = "Commodities"
-author = "Jeremy Bejarano"
+[project]
+name = "Commodities"
+description = "Commodity futures returns and basis data from Bloomberg and WRDS"
+contributors = [
+    "Jeremy Bejarano",
+]
+repo_url = "https://github.com/ftsfr/commodities"
 copyright = "2025"
-logo_path = ""
-favicon_path = ""
-
-[pipeline]
-id = "commodities"
-pipeline_name = "Commodities"
-pipeline_description = "Commodity futures returns and basis data from Bloomberg and WRDS"
-lead_pipeline_developer = "Jeremy Bejarano"
-contributors = ["Jeremy Bejarano"]
-runs_on = "Windows/Linux/MacOS (Bloomberg + WRDS required)"
-git_repo_URL = "https://github.com/ftsfr/commodities"
-README_file_path = "./README.md"
-
-[notebooks]
+os_compatibility = [
+    "Windows/Linux/MacOS (Bloomberg + WRDS required)",
+]
 
 [notebooks.summary_commodities]
-notebook_name = "summary_commodities"
-notebook_description = "Summary statistics and visualization of commodity returns"
-notebook_path = "_output/summary_commodities_ipynb.ipynb"
-is_publishable = true
-
-[charts]
-
-[charts.commodities_cumulative_returns]
-chart_name = "Commodities Cumulative Returns"
-short_description_chart = "Cumulative returns showing growth of $1 invested in commodities"
-dataframe_id = "ftsfr_commodities_returns"
-path_to_html_chart = "./_output/commodities_cumulative_returns.html"
-path_to_excel_chart = ""
-topic_tags = ["commodities", "futures", "cumulative returns", "energy", "metals", "agriculture"]
-past_publications = []
-chart_docs_str = """
-## Commodities Cumulative Returns
-
-Cumulative returns showing growth of $1 invested in commodities constructed from GSCI indices and futures data.
-
-### Commodities Covered
-
-- Energy: Crude Oil, Natural Gas, Heating Oil, Gasoline
-- Metals: Gold, Silver, Copper, Aluminum, Nickel, Lead, Zinc
-- Agriculture: Corn, Wheat, Soybeans, Sugar, Coffee, Cocoa, Cotton
-- Livestock: Lean Hogs, Live Cattle, Feeder Cattle
-
-### Calculation
-
-Cumulative return = Product of (1 + monthly return) over time
-
-### Data Sources
-
-Bloomberg GSCI indices, WRDS futures data
-"""
-
-[dataframes]
+name = "summary_commodities"
+description = "Summary statistics and visualization of commodity returns"
+path = "_output/summary_commodities_ipynb.ipynb"
+publishable = true
 
 [dataframes.ftsfr_commodities_returns]
-dataframe_name = "ftsfr_commodities_returns"
-short_description_df = "Monthly commodity returns matched to HKM factors"
-data_sources = ["Bloomberg", "WRDS", "He-Kelly-Manela"]
-data_providers = ["Bloomberg", "WRDS", "AQR"]
-need_to_contact_provider = ["no"]
-data_on_pre_approved_list = ["No"]
-links_to_data_providers = ["https://bloomberg.com", "https://wrds-www.wharton.upenn.edu"]
-topic_tags = ["commodities", "futures", "returns", "GSCI", "energy", "metals", "agriculture"]
-type_of_data_access = ["Bloomberg Terminal", "WRDS", "Public"]
-data_license = "Bloomberg / WRDS / Public"
-license_expiration_date = ""
-provider_contact_info = ""
-restriction_on_use = "No"
-how_is_pulled = "GSCI indices from Bloomberg, matched to HKM commodity factors"
-path_to_parquet_data = "./_data/ftsfr_commodities_returns.parquet"
-path_to_excel_data = ""
+name = "ftsfr_commodities_returns"
+description = "Monthly commodity returns matched to HKM factors"
+sources = [
+    "Bloomberg",
+    "WRDS",
+    "He-Kelly-Manela",
+]
+providers = [
+    "Bloomberg",
+    "WRDS",
+    "AQR",
+]
+contact_required = [
+    "no",
+]
+pre_approved = [
+    "No",
+]
+provider_links = [
+    "https://bloomberg.com",
+    "https://wrds-www.wharton.upenn.edu",
+]
+tags = [
+    "commodities",
+    "futures",
+    "returns",
+    "GSCI",
+    "energy",
+    "metals",
+    "agriculture",
+]
+access_types = [
+    "Bloomberg Terminal",
+    "WRDS",
+    "Public",
+]
+license = "Bloomberg / WRDS / Public"
+restrictions = "No"
+pull_method = "GSCI indices from Bloomberg, matched to HKM commodity factors"
+path = "./_data/ftsfr_commodities_returns.parquet"
 date_col = "ds"
-dataframe_docs_str = """
+docs = """
 ## Commodity Returns
 
 Monthly returns for commodities constructed from GSCI indices and futures data.
@@ -109,4 +89,38 @@ Monthly returns for commodities constructed from GSCI indices and futures data.
 - Bloomberg: GSCI indices, commodity futures prices
 - WRDS: Futures contract data
 - He-Kelly-Manela: Commodity factor reference
+"""
+
+[charts.commodities_cumulative_returns]
+name = "Commodities Cumulative Returns"
+description = "Cumulative returns showing growth of $1 invested in commodities"
+dataframe = "ftsfr_commodities_returns"
+path = "./_output/commodities_cumulative_returns.html"
+tags = [
+    "commodities",
+    "futures",
+    "cumulative returns",
+    "energy",
+    "metals",
+    "agriculture",
+]
+docs = """
+## Commodities Cumulative Returns
+
+Cumulative returns showing growth of $1 invested in commodities constructed from GSCI indices and futures data.
+
+### Commodities Covered
+
+- Energy: Crude Oil, Natural Gas, Heating Oil, Gasoline
+- Metals: Gold, Silver, Copper, Aluminum, Nickel, Lead, Zinc
+- Agriculture: Corn, Wheat, Soybeans, Sugar, Coffee, Cocoa, Cotton
+- Livestock: Lean Hogs, Live Cattle, Feeder Cattle
+
+### Calculation
+
+Cumulative return = Product of (1 + monthly return) over time
+
+### Data Sources
+
+Bloomberg GSCI indices, WRDS futures data
 """
